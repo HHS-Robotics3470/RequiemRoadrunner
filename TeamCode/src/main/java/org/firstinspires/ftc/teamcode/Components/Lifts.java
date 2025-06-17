@@ -13,7 +13,7 @@ public class Lifts implements Component{
     private final int LIFT_LOW = 0;
     private final int LIFT_HIGH = -1600;
     private final double EXTENDO_IN = 0;
-    private final double EXTENDO_OUT = 0.35;
+    private final double EXTENDO_OUT = 0.3;
     // Vertical Lift motors
     private DcMotorEx lLift;
     private DcMotorEx rLift;
@@ -56,7 +56,7 @@ public class Lifts implements Component{
         Lextendo.setPosition(EXTENDO_IN);
         Rextendo.setPosition(EXTENDO_IN);
 
-        moveLiftsToZero();
+//        moveLiftsToZero();
     }
 
     // Raise Lift function

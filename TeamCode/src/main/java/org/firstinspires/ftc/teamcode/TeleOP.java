@@ -3,13 +3,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import org.firstinspires.ftc.teamcode.Components.RobotHardware;
-import org.firstinspires.ftc.teamcode.Components.Claw;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.teamcode.Components.RobotHardware;
 
 
@@ -26,7 +19,7 @@ public class TeleOP extends LinearOpMode {
     private boolean xstate = false;
     private boolean dpadLeftState = false;
     private boolean bdpadUpState = false;
-    private ElapsedTime mStateTime;
+    private ElapsedTime mStateTime = new ElapsedTime();
 
     @Override
     public void runOpMode() {
@@ -36,7 +29,9 @@ public class TeleOP extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        int k_state = 0;
+        int intake_state = 0;
+        int transfer_state = 0;
+        int deposit_state = 0;
 
         waitForStart();
         robot.init();
@@ -47,6 +42,7 @@ public class TeleOP extends LinearOpMode {
             //driver hub output
             telemetry.addData("Lift position", robot.lifts.getLiftPosition());
             telemetry.addData("Extendo position", robot.lifts.getExtendoPosition());
+            telemetry.addData("matric", intake_state);
             telemetry.update();
 
             //drivetrain control
@@ -71,38 +67,117 @@ public class TeleOP extends LinearOpMode {
                 robot.lifts.Bextendo_in();
             }
 
+            //grab or intake
             if (gamepad1.a && !a1state) {
                 a1state = true;
-                k_state = 0;
+                intake_state = 0;
                 mStateTime.reset();
             }
-
-            //grab or intake
             if (a1state) {
-                switch (k_state) {
+                switch (intake_state) {
                     case 0:
                         robot.intake.fourBarIntaking();
                         robot.intake.clawIntakeOpen();
                         robot.intake.pitchIntaking();
-                        if (mStateTime.seconds() >= 0.4) {
+                        if (mStateTime.seconds() >= 1) {
                             mStateTime.reset();
-                            k_state++;
+                            intake_state++;
                         }
                         break;
 
                     case 1:
                         robot.intake.clawIntakeClose();
-                        if (mStateTime.seconds() >= 0.25) {
+                        if (mStateTime.seconds() >= 1) {
                             mStateTime.reset();
-                            k_state++;
+                            intake_state++;
                         }
                         break;
 
                     case 2:
-                        robot.intake.pitchIntakeReady();
+                        robot.intake.pitchTransfer();
+                        robot.intake.fourBarTransfer();
                         a1state = false;
                         break;
                 }
+            }
+
+            //transfer button
+            if (gamepad1.b && !b1state)
+            {
+                b1state = true;
+                transfer_state = 0;
+                mStateTime.reset();
+            }
+            if (b1state)
+            {
+                switch (transfer_state) {
+                    case 0:
+                        robot.intake.fourBarTransfer();
+                        robot.intake.pitchTransfer();
+                        robot.claw.clawOpen();
+                        robot.claw.armDown();
+                        robot.claw.wristDown();
+                        if (mStateTime.seconds() >= 1) {
+                            mStateTime.reset();
+                            transfer_state++;
+                        }
+                        break;
+                    case 1:
+                        robot.claw.clawClose();
+                        if (mStateTime.seconds() >= 1) {
+                            mStateTime.reset();
+                            transfer_state++;
+                        }
+                        break;
+                    case 2:
+                        robot.claw.armRest();
+                        robot.claw.wristRest();
+                        b1state = false;
+                }
+            }
+
+            //deposit button
+            if (gamepad1.x && !xstate)
+            {
+                xstate = true;
+                deposit_state = 0;
+                mStateTime.reset();
+            }
+            if (xstate)
+            {
+                switch (deposit_state)
+                {
+                    case 0:
+                        robot.claw.armSpec();
+                        robot.claw.wristSpec();
+                        if (mStateTime.seconds() >= 1) {
+                            mStateTime.reset();
+                            deposit_state++;
+                        }
+                        break;
+                    case 1:
+                        robot.claw.clawOpen();
+                        if (mStateTime.seconds() >= 1)
+                        {
+                            mStateTime.reset();
+                            deposit_state++;
+                        }
+                    case 2:
+                        robot.claw.armRest();
+                        robot.claw.wristRest();
+                        xstate = false;
+                }
+            }
+
+            //outtake toggle button
+            if (gamepad1.y && !y1state)
+            {
+                robot.claw.swing();
+                a1state = true;
+            }
+            else if (!gamepad1.y && y1state)
+            {
+                y1state = false;
             }
 
         }
