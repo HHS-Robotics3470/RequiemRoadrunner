@@ -102,13 +102,13 @@ public class TeleOP extends LinearOpMode {
             }
 
             //transfer button
-            if (gamepad1.b && !b1state)
+            if (gamepad2.b && !b2state)
             {
-                b1state = true;
+                b2state = true;
                 transfer_state = 0;
                 mStateTime.reset();
             }
-            if (b1state)
+            if (b2state)
             {
                 switch (transfer_state) {
                     case 0:
@@ -132,7 +132,7 @@ public class TeleOP extends LinearOpMode {
                     case 2:
                         robot.claw.armRest();
                         robot.claw.wristRest();
-                        b1state = false;
+                        b2state = false;
                 }
             }
 
@@ -173,11 +173,21 @@ public class TeleOP extends LinearOpMode {
             if (gamepad1.y && !y1state)
             {
                 robot.claw.swing();
-                a1state = true;
+                y1state = true;
             }
             else if (!gamepad1.y && y1state)
             {
                 y1state = false;
+            }
+
+            if (gamepad1.b && !b1state)
+            {
+                robot.claw.toggleClaw();
+                b1state = true;
+            }
+            else if (!gamepad1.b && b1state)
+            {
+                b1state = false;
             }
 
         }
