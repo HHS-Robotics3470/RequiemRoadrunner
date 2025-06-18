@@ -41,6 +41,7 @@ public class RightAuto extends LinearOpMode {
     Pose2d testPos12 = new Pose2d(47, -50, -Math.PI);
     Pose2d testPos13 = new Pose2d(14, -50, -Math.PI);
 
+
     @Override
     public void runOpMode() {
         //initialize hardware and roadrunner
