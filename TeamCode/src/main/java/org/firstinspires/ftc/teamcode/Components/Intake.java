@@ -18,7 +18,7 @@ public class Intake implements Component{
     public final double SWEEPER_INITIAL_POSITION = 0.008;
     public final double SWEEPER_FINAL_POSITION = 0.34; //0.053;
     public final double SWEEPER_AUTO_POSITION = 0.34;
-
+    public final double FOUR_PITCH_TUCK = 0.035;
     public final double FOUR_PITCH_TRANSFER = 0.02;
     public final double FOUR_PITCH_SPIT = 0.2;
     public final double FOUR_PITCH_INTAKING = 0.15;
@@ -113,6 +113,12 @@ public class Intake implements Component{
 
     public void sweeperFinal() {intakeWrist.setPosition(SWEEPER_FINAL_POSITION);}
 
+    public void tuckin (){
+fourBarPitch.setPosition(FOUR_PITCH_TUCK);
+    }
+    public void tuckout (){
+        fourBarPitch.setPosition(FOUR_PITCH_TRANSFER);
+    }
 
 
 

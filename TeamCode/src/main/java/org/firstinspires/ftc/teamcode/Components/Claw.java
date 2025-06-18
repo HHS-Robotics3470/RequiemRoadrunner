@@ -13,7 +13,7 @@ public class Claw implements Component{
     private boolean ifOpen = false;
     private final double CLAW_OPEN_POSITION = 0.056;   // Adjust as needed for your claw design
     private final double CLAW_CLOSE_POSITION = 0.0;  // Adjust as needed for your claw design
-    private final double ARM_UP_POSITION = 0.491;    // Adjust as needed for your pitch servo
+    private final double ARM_UP_POSITION = 0.485;    // Adjust as needed for your pitch servo
     private final double ARM_SPECIMEN_POSITION = 0.379;
     private final double ARM_DOWN_POSITION = 0;
     private final double ARM_REST_POSITION = 0.56;

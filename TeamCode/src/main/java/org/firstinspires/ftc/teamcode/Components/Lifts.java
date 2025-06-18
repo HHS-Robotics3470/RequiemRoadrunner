@@ -127,6 +127,8 @@ public class Lifts implements Component{
         rLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
+
+
     //lift position output
     public int getLiftPosition(){
         return lLift.getCurrentPosition();
