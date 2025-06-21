@@ -9,9 +9,9 @@ public class Intake implements Component{
     public final double PITCH_UP = 0.05;
     public final double PITCH_SPECIMEN_REST = 0.2;
     public final double PITCH_TRANSFER_SAMPLE = 0.15;
-    public final double PITCH_INTAKING = 0.28;
-    public final double PITCH_TRANSFER = 0.08;
-    public final double PITCH_REST = 0.0588;
+    public final double PITCH_INTAKING = 0.4;
+    public final double PITCH_TRANSFER = 0;
+    public final double PITCH_REST = 0.12;
     private final double INTAKE_CLAW_OPEN_POSITION = 0.05;
     private final double INTAKE_CLAW_CLOSE_POSITION = 0.015;
 
@@ -19,9 +19,10 @@ public class Intake implements Component{
     public final double SWEEPER_FINAL_POSITION = 0.34; //0.053;
     public final double SWEEPER_AUTO_POSITION = 0.34;
     public final double FOUR_PITCH_TUCK = 0.035;
-    public final double FOUR_PITCH_TRANSFER = 0.02;
-    public final double FOUR_PITCH_SPIT = 0.2;
-    public final double FOUR_PITCH_INTAKING = 0.15;
+    public final double FOUR_PITCH_TRANSFER = 0;
+    public final double FOUR_PITCH_SPIT = 0.1;
+    public final double FOUR_PITCH_INTAKING = 0.143;
+    public final double FOUR_PITCH_INTAKING_READY = 0.1825;
 
     private boolean ifPressed;
 
@@ -45,7 +46,7 @@ public class Intake implements Component{
         fourBarPitch.setDirection(Servo.Direction.FORWARD);
         intakeWrist.setDirection(Servo.Direction.REVERSE);
 
-        intakePitch.setPosition(PITCH_TRANSFER);
+        intakePitch.setPosition(PITCH_REST);
         clawIntake.setPosition(INTAKE_CLAW_CLOSE_POSITION);
         intakeWrist.setPosition(SWEEPER_INITIAL_POSITION);
         fourBarPitch.setPosition(FOUR_PITCH_TRANSFER);
@@ -77,8 +78,10 @@ public class Intake implements Component{
     //for claw intake
     public void pitchTransfer()
     {
+        intakePitch.setDirection(Servo.Direction.FORWARD);
         intakePitch.setPosition(PITCH_TRANSFER);
     }
+
     public void pitchIntaking()
     {
         intakePitch.setPosition(PITCH_INTAKING);
@@ -98,14 +101,15 @@ public class Intake implements Component{
     {
         fourBarPitch.setPosition(FOUR_PITCH_INTAKING);
     }
+    public void fourBarIntakingReady()
+    {
+        fourBarPitch.setPosition(FOUR_PITCH_INTAKING_READY);
+    }
     public void fourBarTransfer()
     {
         fourBarPitch.setPosition(FOUR_PITCH_TRANSFER);
     }
-    public void fourBarSpit()
-    {
-        fourBarPitch.setPosition(FOUR_PITCH_SPIT);
-    }
+    public void fourBarSpit() { fourBarPitch.setPosition(FOUR_PITCH_SPIT); }
 
     public void sweeperInitial(){
         intakeWrist.setPosition(SWEEPER_INITIAL_POSITION);
@@ -118,6 +122,17 @@ fourBarPitch.setPosition(FOUR_PITCH_TUCK);
     }
     public void tuckout (){
         fourBarPitch.setPosition(FOUR_PITCH_TRANSFER);
+    }
+
+    public void toggleWrist (){
+        if (ifPressed){
+           sweeperInitial();
+           ifPressed = false;
+        }
+        else {
+            sweeperFinal();
+            ifPressed = true;
+        }
     }
 
 

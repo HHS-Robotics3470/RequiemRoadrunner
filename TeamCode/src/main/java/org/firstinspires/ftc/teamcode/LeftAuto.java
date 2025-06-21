@@ -22,22 +22,17 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.Components.RobotHardware;
-
+import org.opencv.core.Mat;
 
 @Autonomous(name = "Left Auto", group = "Autonomous")
-public class LeftAuto extends LinearOpMode{
-
-   ElapsedTime time = new ElapsedTime();
-
-    Pose2d startPos = new Pose2d(0,0,0);
-    Pose2d testPos = new Pose2d(25, 0,0);
-    Pose2d testPos2 = new Pose2d(30, 0,0);
-
-    Pose2d testPos3 = new Pose2d(10, 0,0);
-
+public class LeftAuto extends LinearOpMode {
+    ElapsedTime time = new ElapsedTime();
+Pose2d startPos = new Pose2d(0, 0, Math.PI/2);
+    Pose2d testPos = new Pose2d(11, 38, Math.PI/2);
+    Pose2d parkPos = new Pose2d(48, 10, -Math.PI/2);
 
     @Override
-    public void runOpMode(){
+    public void runOpMode() {
         //initialize hardware and roadrunner
         RobotHardware robot = new RobotHardware(this);
         robot.init();
@@ -45,34 +40,31 @@ public class LeftAuto extends LinearOpMode{
 
         //build trajectories
         Action traj1 = drive.actionBuilder(startPos)
-                .splineToConstantHeading(testPos.component1(), 0)
+                .splineToConstantHeading(testPos.component1(), Math.PI/2)
+                .turnTo(3*Math.PI/4)
+                .lineToX(4)
                 .build();
-        Action traj2 = drive.actionBuilder(testPos)
-                .splineToConstantHeading(testPos2.component1(), 0)
-                .build();
-        Action traj3 = drive.actionBuilder(testPos2)
-                .splineToConstantHeading(testPos3.component1(), 0)
-                .build();
-//        Action traj3 = drive.actionBuilder(testPos2)
-//                .splineToLinearHeading(startPos, 0)
-//                .build();
+
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
         waitForStart();
-
         robot.claw.clawClose();
-        robot.claw.armUp();
-        robot.claw.wristUP();
+        robot.claw.armSample();
+        robot.claw.wristSAMPLE();
         Actions.runBlocking(traj1);
-        Actions.runBlocking(traj2);
+        sleep(100);
         robot.claw.clawOpen();
-        Actions.runBlocking(traj3);
-        robot.claw.armRest();
-        robot.claw.wristRest();
+        sleep(300);
 
-
+        Action traj2 = drive.actionBuilder(drive.localizer.getPose())
+                .lineToX(25)
+                .splineToLinearHeading(parkPos, -Math.PI/2)
+                .build();
+        Actions.runBlocking(traj2);
+        robot.claw.armUp();
+        sleep(100);
 
     }
 }

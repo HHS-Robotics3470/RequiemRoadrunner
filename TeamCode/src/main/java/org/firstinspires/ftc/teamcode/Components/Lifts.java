@@ -13,6 +13,8 @@ public class Lifts implements Component{
     private final int LIFT_LOW = 0;
     private final int LIFT_HIGH = -1600;
     private final double EXTENDO_IN = 0;
+
+    private final double EXTENDO_TRANSFER = 0.075;
     private final double EXTENDO_OUT = 0.3;
     // Vertical Lift motors
     private DcMotorEx lLift;
@@ -102,6 +104,11 @@ public class Lifts implements Component{
        Lextendo.setPosition(EXTENDO_OUT);
     }
 
+    public void Bextendo_transfer() {
+        Rextendo.setPosition(EXTENDO_TRANSFER);
+        Lextendo.setPosition(EXTENDO_TRANSFER);
+    }
+
     //moves lifts down based on touch sensor input
    public void moveLiftsToZero() {
         lLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -125,6 +132,21 @@ public class Lifts implements Component{
 
         lLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void GoToPositionVertical(int target)
+    {
+        while (lLift.getCurrentPosition() != target && rLift.getCurrentPosition() != target)
+        {
+            lLift.setTargetPosition(target);
+            rLift.setTargetPosition(target);
+
+            lLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            lLift.setPower(1);
+            rLift.setPower(1);
+        }
     }
 
 

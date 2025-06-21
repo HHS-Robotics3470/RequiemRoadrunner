@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Mecnum implements Component{
     private RobotHardware robotHardware;
 
-    public final double DRIVE_SPEED_MAX = 0.95;
+    public final double DRIVE_SPEED_MAX = 0.875;
     public final double DRIVE_SPEED_SLOW = 0.05;
     public double driveSpeedControl = DRIVE_SPEED_MAX;
 
@@ -140,5 +140,15 @@ public class Mecnum implements Component{
         bRight.setPower(-power * driveSpeedControl * speedBRight);
         stopAllMotors();
     }
+
+    public void brake(Gamepad gamepad1)
+    {
+        double speed = 1 - gamepad1.right_trigger;
+        if (speed < 0.3)
+            driveSpeedControl = 0.3;
+        else
+            driveSpeedControl = speed;
+    }
+
 }
 
