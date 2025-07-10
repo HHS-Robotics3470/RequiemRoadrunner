@@ -22,7 +22,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.Components.RobotHardware;
-
 @Autonomous(name = "Right Auto", group = "Autonomous")
 public class RightAuto extends LinearOpMode {
     ElapsedTime time = new ElapsedTime();
