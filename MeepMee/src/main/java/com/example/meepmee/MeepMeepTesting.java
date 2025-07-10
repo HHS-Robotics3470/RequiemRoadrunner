@@ -1,83 +1,73 @@
 package com.example.meepmee;
 
+import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.noahbres.meepmeep.MeepMeep;
+import com.noahbres.meepmeep.core.colorscheme.scheme.ColorSchemeBlueDark;
+import com.noahbres.meepmeep.core.colorscheme.scheme.ColorSchemeRedDark;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
-import com.acmerobotics.roadrunner.Vector2d;
 
-        public class MeepMeepTesting {
+
+
+public class MeepMeepTesting {
             public static void main(String[] args) {
-                MeepMeep meepMeep = new MeepMeep(800);
+
+//                Left Side Positions
+                Pose2d rightstartPos = new Pose2d(10, -63, Math.toRadians(0));
+                Pose2d rightPos1 = new Pose2d(10, -33, Math.toRadians(0));
+
+//                Left Side Positions
+                Pose2d leftstartPos = new Pose2d(-10, -63, Math.toRadians(0));
+                Pose2d leftPos1 = new Pose2d(-10, -33, Math.toRadians(0));
+
+                //Window Size
+                MeepMeep meepMeep = new MeepMeep(600);
+
+                //Initializing bots
+                RoadRunnerBotEntity mySecondBot = new DefaultBotBuilder(meepMeep)
+                        .setColorScheme(new ColorSchemeBlueDark())
+                        // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
+                        .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 10.67)
+                        .build();
 
                 RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
+                        .setColorScheme(new ColorSchemeRedDark())
                         // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                        .setConstraints(75, 75, Math.toRadians(180), Math.toRadians(180), 10.67)
+                        .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 10.67)
                         .build();
 
 
-                //-35, 44
-                //-47, 13
-                myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(0, 63, Math.toRadians(90)))
-                        .strafeTo(new Vector2d(0,32))
-                        .waitSeconds(.5)
-                                .setTangent(Math.toRadians(90))
-                                .splineToLinearHeading(new Pose2d(new Vector2d(-35, 44), Math.toRadians(-90)), Math.toRadians(-90))
-                                .setTangent(Math.toRadians(-90))
-                                .splineToConstantHeading(new Vector2d(-35, 12), Math.toRadians(-90))
-                                .setTangent(Math.toRadians(-90))
-                                .splineToConstantHeading(new Vector2d(-46, 13), Math.toRadians(90))
-                                .waitSeconds(0.1)
-                        .strafeTo(new Vector2d(-46,56), new TranslationalVelConstraint(80))
-                                .setTangent(Math.toRadians(-90))
-                        .splineToConstantHeading(new Vector2d(-46, 10), Math.toRadians(-90))
-                                .setTangent(Math.toRadians(-90))
-                                .splineToConstantHeading(new Vector2d(-54, 10), Math.toRadians(90))
-                                .waitSeconds(0.1)
-                        .strafeTo(new Vector2d(-54,56), new TranslationalVelConstraint(80))
-                        .setTangent(Math.toRadians(-90))
-                        .splineToConstantHeading(new Vector2d(-54, 10), Math.toRadians(-90))
-                        .setTangent(Math.toRadians(-90))
-                        .splineToConstantHeading(new Vector2d(-62, 10), Math.toRadians(90))
-                        .waitSeconds(0.1)
-                        .strafeTo(new Vector2d(-62,56), new TranslationalVelConstraint(80))
+                //Sequences to run the positions
+                Action fullSequenceRight = myBot.getDrive().actionBuilder(rightstartPos)
+                        .splineToConstantHeading(rightPos1.component1(), 0)
+                        .waitSeconds(0.5)
+                        .build();
 
-                                .setTangent(Math.toRadians(-90))
-                                .splineToLinearHeading(new Pose2d(new Vector2d(-2, 32), Math.toRadians(90)), Math.toRadians(-90))
+                Action fullSequenceLeft = mySecondBot.getDrive().actionBuilder(leftstartPos)
+                        .splineToConstantHeading(leftPos1.component1(), 0)
+                        .waitSeconds(0.5)
+                        .build();
 
-                                .setTangent(Math.toRadians(90))
-                                .splineToLinearHeading(new Pose2d(new Vector2d(-60, 63), Math.toRadians(180)), Math.toRadians(180))
 
-                        .setTangent(Math.toRadians(-90))
-                        .splineToLinearHeading(new Pose2d(new Vector2d(-4, 32), Math.toRadians(90)), Math.toRadians(-90))
 
-                        .setTangent(Math.toRadians(90))
-                        .splineToLinearHeading(new Pose2d(new Vector2d(-60, 63), Math.toRadians(180)), Math.toRadians(180))
+                //Code to actually run the sequence
+                myBot
+                        .runAction(fullSequenceRight);
+                mySecondBot
+                        .runAction(fullSequenceLeft);
 
-                        .setTangent(Math.toRadians(-90))
-                        .splineToLinearHeading(new Pose2d(new Vector2d(-6, 32), Math.toRadians(90)), Math.toRadians(-90))
-
-                        .setTangent(Math.toRadians(90))
-                        .splineToLinearHeading(new Pose2d(new Vector2d(-60, 63), Math.toRadians(180)), Math.toRadians(180))
-
-                        .setTangent(Math.toRadians(-90))
-                        .splineToLinearHeading(new Pose2d(new Vector2d(-8, 32), Math.toRadians(90)), Math.toRadians(-90))
-
-                        .setTangent(Math.toRadians(90))
-                        .splineToLinearHeading(new Pose2d(new Vector2d(-60, 63), Math.toRadians(180)), Math.toRadians(180))
-
-                        .setTangent(Math.toRadians(-90))
-                        .splineToLinearHeading(new Pose2d(new Vector2d(-10, 32), Math.toRadians(90)), Math.toRadians(-90))
-
-                        .setTangent(Math.toRadians(90))
-                        .splineToLinearHeading(new Pose2d(new Vector2d(-60, 63), Math.toRadians(180)), Math.toRadians(180))
-
-                        .build());
-                meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
+                //Backround
+                meepMeep
+                        .setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
                         .setDarkMode(true)
                         .setBackgroundAlpha(0.95f)
+
+                        //The Bots You Want to Have If you have more than one
                         .addEntity(myBot)
+                        .addEntity(mySecondBot)
+
+                        //start
                         .start();
             }
         }

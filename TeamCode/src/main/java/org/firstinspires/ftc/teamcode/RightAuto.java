@@ -42,8 +42,8 @@ public class RightAuto extends LinearOpMode {
     Pose2d testPos13 = new Pose2d(14, -50, 0);
     Pose2d testPos14 = new Pose2d(7, -30, Math.toRadians(180));
     Pose2d testPos15 = new Pose2d(20, 10, 0);
-    Pose2d testPos16 = new Pose2d(16, 10, 0);
-    Pose2d testPos17 = new Pose2d(2, -100, 0);
+    Pose2d testPos16 = new Pose2d(38, 10, 0);
+    Pose2d testPos17 = new Pose2d(0, -100, 0);
 
 
     @Override
@@ -118,10 +118,8 @@ public class RightAuto extends LinearOpMode {
         Action traj15 = drive.actionBuilder(testPos14)
                 .splineToLinearHeading(testPos15, 0)
                 .build();
-        Action traj16 = drive.actionBuilder(testPos15)
-                .splineToLinearHeading(testPos16, 0)
-                .build();
-        Action traj17 = drive.actionBuilder(testPos16)
+
+        Action traj17 = drive.actionBuilder(testPos15)
                 .splineToLinearHeading(testPos3, 0)
                 .build();
         Action traj18 = drive.actionBuilder(testPos3)
@@ -162,9 +160,9 @@ public class RightAuto extends LinearOpMode {
 
         Actions.runBlocking(traj15);
 
-        Actions.runBlocking(traj16);
         robot.claw.clawOpen();
         Actions.runBlocking(traj17);
         Actions.runBlocking(traj18);
+        sleep(500);
     }
 }
